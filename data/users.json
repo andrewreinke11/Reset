@@ -1,0 +1,14 @@
+[
+  {
+    "userName": "testuser",
+    "email": "test@example.com",
+    "passwordHash": "$2b$10$4tV3KuLFbKYnhVsKKx7kG.GcC953ldAasVMQdEerGffEcbOaJYvNG",
+    "files": []
+  },
+  {
+    "userName": "User",
+    "email": "user@dummy.com",
+    "passwordHash": "$2b$10$rHlXiTU5r/HKpGxvwHKsOOULrPwiJ0adxkktXkI5GvoBJUlVXcFii",
+    "files": []
+  }
+]

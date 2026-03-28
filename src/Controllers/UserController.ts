@@ -1,16 +1,19 @@
 import express, { Request, Response } from "express";
 import bcrypt from "bcrypt";
-import { User, users } from "../models/User";
+import { User, users, loadUsers, saveUsers } from "../models/User";
 import type { ResetFile } from "../models/ResetFile";
 
 const router = express.Router();
+
+loadUsers();
 
 function findUser(userName: string): User | undefined {
   return users.find((u) => u.userName.toLowerCase() === userName.toLowerCase());
 }
 
 router.get("/", (req: Request, res: Response) => {
-  res.json(users);
+  const usersResponse = users.map(({ passwordHash, ...u }) => u);
+  res.json(usersResponse);
 });
 
 router.get("/:userName", (req: Request, res: Response) => {
@@ -18,7 +21,8 @@ router.get("/:userName", (req: Request, res: Response) => {
   if (!user) {
     return res.status(404).json({ message: "User not found" });
   }
-  res.json(user);
+  const { passwordHash, ...userResponse } = user;
+  res.json(userResponse);
 });
 
 router.post("/", async (req: Request, res: Response) => {
@@ -42,9 +46,35 @@ router.post("/", async (req: Request, res: Response) => {
     };
 
     users.push(newUser);
-    res.status(201).json(newUser);
+    saveUsers();
+    const { passwordHash: _, ...userResponse } = newUser;
+    res.status(201).json(userResponse);
   } catch (error) {
     res.status(500).json({ message: "Error creating user" });
+  }
+});
+
+router.post("/login", async (req: Request, res: Response) => {
+  const { userName, password } = req.body as { userName?: string; password?: string };
+  if (!userName || !password) {
+    return res.status(400).json({ message: "userName and password are required" });
+  }
+
+  const user = findUser(userName);
+  if (!user) {
+    return res.status(401).json({ message: "Invalid username or password" });
+  }
+
+  try {
+    const isValidPassword = await bcrypt.compare(password, user.passwordHash);
+    if (!isValidPassword) {
+      return res.status(401).json({ message: "Invalid username or password" });
+    }
+
+    const { passwordHash, ...userResponse } = user;
+    res.json(userResponse);
+  } catch (error) {
+    res.status(500).json({ message: "Error during login" });
   }
 });
 
@@ -54,7 +84,7 @@ router.put("/:userName", async (req: Request, res: Response) => {
     return res.status(404).json({ message: "User not found" });
   }
 
-  const { email, password, files } = req.body as { email?: string; password?: string; files?: ResetFile[] };
+  const { email, password, files } = req.body as { email?: string; password?: string; files?: string[] };
   if (email !== undefined) user.email = email;
   if (password !== undefined) {
     try {
@@ -65,7 +95,10 @@ router.put("/:userName", async (req: Request, res: Response) => {
   }
   if (files !== undefined) user.files = Array.isArray(files) ? files : user.files;
 
-  res.json(user);
+  saveUsers();
+
+  const { passwordHash, ...userResponse } = user;
+  res.json(userResponse);
 });
 
 router.delete("/:userName", (req: Request, res: Response) => {
@@ -74,6 +107,7 @@ router.delete("/:userName", (req: Request, res: Response) => {
     return res.status(404).json({ message: "User not found" });
   }
   const [deleted] = users.splice(index, 1);
+  saveUsers();
   res.json(deleted);
 });
 
