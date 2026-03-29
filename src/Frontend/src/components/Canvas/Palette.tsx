@@ -19,6 +19,7 @@ export const Palette: React.FC<PaletteProps> = ({
   const [showColorPicker, setShowColorPicker] = useState(false);
   const [pickerMode, setPickerMode] = useState<'add' | 'update'>('add');
   const [selectedColor, setSelectedColor] = useState('#000000');
+  const [selectedAlpha, setSelectedAlpha] = useState(255);
 
   const rgbToHex = (r: number, g: number, b: number) =>
     `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
@@ -26,6 +27,7 @@ export const Palette: React.FC<PaletteProps> = ({
   const openAddColor = () => {
     setPickerMode('add');
     setSelectedColor('#000000');
+    setSelectedAlpha(255);
     setShowColorPicker(true);
   };
 
@@ -35,11 +37,16 @@ export const Palette: React.FC<PaletteProps> = ({
     const selected = palette[selectedColorIndex];
     setPickerMode('update');
     setSelectedColor(rgbToHex(selected.red, selected.green, selected.blue));
+    setSelectedAlpha(selected.alpha);
     setShowColorPicker(true);
   };
 
   const handleColorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedColor(event.target.value);
+  };
+
+  const handleAlphaChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedAlpha(Number(event.target.value));
   };
 
   const handleApplyColor = () => {
@@ -49,9 +56,9 @@ export const Palette: React.FC<PaletteProps> = ({
     const blue = parseInt(hex.substr(4, 2), 16);
 
     if (pickerMode === 'add') {
-      onAddColor(red, green, blue);
+      onAddColor(red, green, blue, selectedAlpha);
     } else {
-      onUpdateColor(selectedColorIndex, red, green, blue);
+      onUpdateColor(selectedColorIndex, red, green, blue, selectedAlpha);
     }
 
     setShowColorPicker(false);
@@ -97,6 +104,20 @@ export const Palette: React.FC<PaletteProps> = ({
             onChange={handleColorChange}
             style={{ marginRight: '10px' }}
           />
+          <div style={{ display: 'inline-block', marginRight: '10px' }}>
+            <label htmlFor="alpha-slider" style={{ display: 'block', fontSize: '12px' }}>
+              Transparency: {Math.round((selectedAlpha / 255) * 100)}%
+            </label>
+            <input
+              id="alpha-slider"
+              type="range"
+              min="0"
+              max="255"
+              value={selectedAlpha}
+              onChange={handleAlphaChange}
+              style={{ width: '100px' }}
+            />
+          </div>
           <button onClick={handleApplyColor} className="add-color-confirm-btn">
             {pickerMode === 'add' ? 'Add' : 'Update'}
           </button>
