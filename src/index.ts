@@ -4,7 +4,7 @@ import userController from "./Controllers/UserController";
 import fileController from "./Controllers/FileController";
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+
 
 // Middleware
 app.use((req, res, next) => {
@@ -23,9 +23,6 @@ app.get("/health", (req, res) => {
   res.json({ status: "OK", message: "Reset Pixel Art Tool API is running" });
 });
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`Reset Pixel Art Tool API listening on port ${PORT}`);
-});
+
 
 export default app;

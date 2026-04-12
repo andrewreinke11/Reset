@@ -57,6 +57,9 @@ coverage/
 *.lcov
 .nyc_output/
 
+# Jest cache
+.jest-cache/
+
 # TypeScript
 *.tsbuildinfo
 .tscache/
@@ -110,5 +113,5 @@ temp/
 *.sqlite
 *.sqlite3
 
-# User data (if not meant to be committed)
-# data/  # Uncomment if user data shouldn't be versioned
+# User data (runtime generated - uncomment if not needed in version control)
+data/

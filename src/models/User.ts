@@ -8,17 +8,19 @@ export interface User {
   files: string[];
   passwordHash: string;
 }
-
+// Path to the users.json file for persistent storage
 const userDataPath = path.join(process.cwd(), "data", "users.json");
 
 export let users: User[] = [];
 
 export function loadUsers(): void {
+  
   try {
+    // Ensure the data directory exists
     if (!fs.existsSync(path.dirname(userDataPath))) {
       fs.mkdirSync(path.dirname(userDataPath), { recursive: true });
     }
-
+    // Load users from disk if the file exists, otherwise initialize an empty array
     if (fs.existsSync(userDataPath)) {
       const fileContents = fs.readFileSync(userDataPath, "utf8");
       users = JSON.parse(fileContents) as User[];

@@ -2,13 +2,13 @@
   {
     "userName": "testuser",
     "email": "test@example.com",
-    "passwordHash": "$2b$10$4tV3KuLFbKYnhVsKKx7kG.GcC953ldAasVMQdEerGffEcbOaJYvNG",
+    "passwordHash": "$2b$10$iTVafGMyiBmGSpc/LxlpK.2y/5bUvEBVEEeLSiwUtXnCOJmFksUcO",
     "files": []
   },
   {
-    "userName": "User",
-    "email": "user@dummy.com",
-    "passwordHash": "$2b$10$rHlXiTU5r/HKpGxvwHKsOOULrPwiJ0adxkktXkI5GvoBJUlVXcFii",
+    "userName": "edgeuser",
+    "email": "edge@example.com",
+    "passwordHash": "$2b$10$sKmKx055jNCGWOOc.A85r.fQzkJwmX8vjzKAh2AYlgBoIOg1m6IaW",
     "files": []
   }
 ]

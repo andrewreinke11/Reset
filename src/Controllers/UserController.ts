@@ -22,6 +22,8 @@ router.get("/:userName", (req: Request, res: Response) => {
     return res.status(404).json({ message: "User not found" });
   }
   const { passwordHash, ...userResponse } = user;
+  // Always include 'files' as an array, never undefined
+  userResponse.files = Array.isArray(userResponse.files) ? userResponse.files : [];
   res.json(userResponse);
 });
 

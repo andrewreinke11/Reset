@@ -23,7 +23,7 @@ export class ResetFile {
     };
   }
 
-  // Push a new model onto the history stack
+  // Push a new model onto the history stack, trimming any redo history
   push(model: Model): void {
     this.currentIndex++;
     this.history = this.history.slice(0, this.currentIndex);

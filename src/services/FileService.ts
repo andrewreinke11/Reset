@@ -103,6 +103,20 @@ export class FileService {
     const file = new ResetFile(fileName, initialModel);
     userFileMap.set(fileName, file);
     storageService.saveModel(userName, fileName, initialModel);
+
+    // Add file to user's files array if not already present
+    try {
+      // Lazy import to avoid circular dependency
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const { users, saveUsers } = require('../models/User');
+      const user = users.find((u: any) => u.userName.toLowerCase() === userName.toLowerCase());
+      if (user && !user.files.includes(fileName)) {
+        user.files.push(fileName);
+        saveUsers();
+      }
+    } catch (e) {
+      // Ignore if user model not available
+    }
     return file;
   }
 
@@ -231,8 +245,10 @@ export class FileService {
     const result = file.undo();
     if (result) {
       this.saveToStorage(userName, fileName);
+      return result;
     }
-    return result;
+    // If nothing to undo, return current model (for API consistency)
+    return file.current();
   }
 
   // Redo
@@ -244,8 +260,10 @@ export class FileService {
     const result = file.redo();
     if (result) {
       this.saveToStorage(userName, fileName);
+      return result;
     }
-    return result;
+    // If nothing to redo, return current model (for API consistency)
+    return file.current();
   }
 
   // Check if undo is available
@@ -273,8 +291,29 @@ export class FileService {
     if (!userFileMap?.has(fileName)) {
       throw new Error(`File "${fileName}" not found for user "${userName}"`);
     }
-    userFileMap.delete(fileName);
+    
+    // Delete from persistent storage FIRST
     storageService.deleteUserFile(userName, fileName);
+
+    // Only after successful deletion, remove from memory
+    userFileMap.delete(fileName);
+
+    // Remove file from user's files array
+    try {
+      // Lazy import to avoid circular dependency
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const { users, saveUsers } = require('../models/User');
+      const user = users.find((u: any) => u.userName.toLowerCase() === userName.toLowerCase());
+      if (user) {
+        const idx = user.files.indexOf(fileName);
+        if (idx !== -1) {
+          user.files.splice(idx, 1);
+          saveUsers();
+        }
+      }
+    } catch (e) {
+      // Ignore if user model not available
+    }
   }
 
   // List all saved files for a user
