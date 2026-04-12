@@ -1,0 +1,144 @@
+.export-dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.export-dialog {
+  background: white;
+  border-radius: 8px;
+  padding: 2rem;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.export-dialog h2 {
+  margin: 0 0 1.5rem 0;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.export-section {
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #eee;
+}
+
+.export-section:last-of-type {
+  border-bottom: none;
+}
+
+.export-section h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.1rem;
+  color: #555;
+}
+
+.export-section p {
+  margin: 0.25rem 0;
+  font-size: 0.9rem;
+  color: #888;
+}
+
+.file-info {
+  font-size: 0.85rem !important;
+  color: #999 !important;
+  font-style: italic;
+}
+
+.export-button {
+  width: 100%;
+  padding: 0.75rem;
+  margin-top: 1rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 600;
+}
+
+.image-export-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.image-export-buttons .export-button {
+  width: 100%;
+  margin-top: 0;
+  padding: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.json-button {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.json-button:hover:not(:disabled) {
+  background-color: #45a049;
+}
+
+.png-button {
+  background-color: #2196F3;
+  color: white;
+}
+
+.png-button:hover:not(:disabled) {
+  background-color: #0b7dda;
+}
+
+.jpg-button {
+  background-color: #FF9800;
+  color: white;
+}
+
+.jpg-button:hover:not(:disabled) {
+  background-color: #e68900;
+}
+
+.webp-button {
+  background-color: #9C27B0;
+  color: white;
+}
+
+.webp-button:hover:not(:disabled) {
+  background-color: #7b1fa2;
+}
+
+.export-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.close-button {
+  width: 100%;
+  padding: 0.75rem;
+  margin-top: 1rem;
+  background-color: #f0f0f0;
+  color: #333;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.close-button:hover:not(:disabled) {
+  background-color: #e0e0e0;
+}
+
+.close-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

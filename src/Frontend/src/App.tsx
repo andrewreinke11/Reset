@@ -3,6 +3,7 @@ import { Auth } from './components/Auth/Auth';
 import { Canvas } from './components/Canvas/Canvas';
 import { Palette } from './components/Canvas/Palette';
 import { FileManager } from './components/FileManager/FileManager';
+import { ExportDialog } from './components/ExportDialog/ExportDialog';
 import { authService, fileService } from './services/api';
 import { Model, FileResponse } from './types';
 import './App.css';
@@ -15,6 +16,7 @@ function App() {
   const [canUndo, setCanUndo] = useState(false);
   const [canRedo, setCanRedo] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showExportDialog, setShowExportDialog] = useState(false);
 
   useEffect(() => {
     const savedUser = authService.getCurrentUser();
@@ -203,6 +205,9 @@ function App() {
                   <button onClick={handleRedo} disabled={!canRedo || loading}>
                     Redo
                   </button>
+                  <button onClick={() => setShowExportDialog(true)} disabled={loading}>
+                    📥 Export
+                  </button>
                 </div>
               </div>
               <Canvas
@@ -218,6 +223,14 @@ function App() {
           )}
         </div>
       </div>
+
+      {showExportDialog && currentModel && currentFile && (
+        <ExportDialog
+          model={currentModel}
+          fileName={currentFile}
+          onClose={() => setShowExportDialog(false)}
+        />
+      )}
     </div>
   );
 }
