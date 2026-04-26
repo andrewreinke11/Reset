@@ -11,6 +11,7 @@ module.exports = {
     '^.+\\.tsx?$': ['ts-jest', {
       tsconfig: {
         jsx: 'react',
+        moduleResolution: 'node',
       },
     }],
   },
