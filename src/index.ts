@@ -5,6 +5,10 @@ import fileController from "./Controllers/FileController";
 
 const app = express();
 
+// Swagger UI (lazy require to avoid dev-time issues)
+const swaggerUi = require('swagger-ui-express');
+const openapiSpec = require('../docs/openapi.json');
+
 
 // Middleware
 app.use((req, res, next) => {
@@ -22,6 +26,9 @@ app.use("/api/files", fileController);
 app.get("/health", (req, res) => {
   res.json({ status: "OK", message: "Reset Pixel Art Tool API is running" });
 });
+
+// API docs
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openapiSpec));
 
 
 
