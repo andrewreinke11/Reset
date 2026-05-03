@@ -74,8 +74,9 @@ The application consists of two main parts:
 
 ### Authentication Endpoints
 
-- `POST /api/users` - Register a new user
-- Authentication is handled via headers (`x-user-name`)
+- `POST /api/users` - Register a new user and receive a JWT
+- `POST /api/users/login` - Log in and receive a JWT
+- Protected routes use `Authorization: Bearer <token>`
 
 ### File Endpoints
 

@@ -42,6 +42,7 @@ export const Auth: React.FC<AuthProps> = ({ onAuth }) => {
             type="text"
             value={userName}
             onChange={(e) => setUserName(e.target.value)}
+            title="Enter your Reset username"
             required
           />
         </div>
@@ -53,6 +54,7 @@ export const Auth: React.FC<AuthProps> = ({ onAuth }) => {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              title="Enter the email address used for your account"
               required
             />
           </div>
@@ -64,18 +66,26 @@ export const Auth: React.FC<AuthProps> = ({ onAuth }) => {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            title="Enter your account password"
             required
           />
         </div>
 
         {error && <div className="error">{error}</div>}
 
-        <button type="submit" disabled={loading}>
+        <button
+          type="submit"
+          disabled={loading}
+          title={isLogin ? 'Log into your Reset account' : 'Create a new Reset account'}
+        >
           {loading ? 'Loading...' : (isLogin ? 'Login' : 'Register')}
         </button>
       </form>
 
-      <button onClick={() => setIsLogin(!isLogin)}>
+      <button
+        onClick={() => setIsLogin(!isLogin)}
+        title={isLogin ? 'Switch to the registration form' : 'Switch to the login form'}
+      >
         Switch to {isLogin ? 'Register' : 'Login'}
       </button>
     </div>

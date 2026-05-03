@@ -3,7 +3,7 @@
   "info": {
     "title": "Reset Pixel Art Tool API",
     "version": "1.0.0",
-    "description": "API for users and pixel art file operations"
+    "description": "API for users and pixel art file operations. Login returns a JWT token and protected routes require Authorization: Bearer <token>."
   },
   "servers": [{ "url": "http://localhost:3000" }],
   "paths": {
@@ -22,7 +22,7 @@
       "post": {
         "summary": "Login user",
         "requestBody": { "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Login" } } } },
-        "responses": { "200": { "description": "User info" }, "401": { "description": "Unauthorized" } }
+        "responses": { "200": { "description": "User info and JWT token" }, "401": { "description": "Unauthorized" } }
       }
     },
     "/api/users/{userName}": {

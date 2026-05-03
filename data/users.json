@@ -1,14 +1,24 @@
 [
   {
-    "userName": "testuser",
-    "email": "test@example.com",
-    "passwordHash": "$2b$10$j7XsALReFhEn79UtdOHDNeujtlwwLAnr6XamCgCRi/jHCagAbi9hi",
+    "userName": "edgeuser",
+    "email": "edge@example.com",
+    "passwordHash": "$2b$10$cFVg29hF0NNvLw.hAlE9resl/YULOFZ1EQrOuAgtn5KGt4YkQ/XHW",
     "files": []
   },
   {
-    "userName": "edgeuser",
-    "email": "edge@example.com",
-    "passwordHash": "$2b$10$PkZ84SE9mfwlLVi5Z.5E.uCMbg3.LkDHk/UlrXhcZ5eZNPGwoXvue",
-    "files": []
+    "userName": "User",
+    "email": "example@fake.com",
+    "passwordHash": "$2b$10$dElKweUtkCmuq6w8I6vrQOfGHUn9PRBFzrI6sSlZxVVs8zd0uKloC",
+    "files": [
+      "ThatOne"
+    ]
+  },
+  {
+    "userName": "cli-20260503165952",
+    "email": "cli-20260503165952@test.local",
+    "passwordHash": "$2b$10$2dGZUlLEgKzUrnMWs9GtZOLztOWyOruDATC7h3SSHpwA/2CF4oRwe",
+    "files": [
+      "frontend-test-cli-20260503165952"
+    ]
   }
 ]

@@ -83,16 +83,22 @@ export const Palette: React.FC<PaletteProps> = ({
             }}
             onClick={() => onColorSelect(index)}
             title={`Color ${index}: rgba(${color.red}, ${color.green}, ${color.blue}, ${color.alpha / 255})`}
+            aria-label={`Select palette color ${index}`}
           />
         ))}
       </div>
       
       {!showColorPicker ? (
         <div className="palette-actions">
-          <button onClick={openAddColor} className="add-color-btn">
+          <button onClick={openAddColor} className="add-color-btn" title="Add a new color to the palette">
             Add Color
           </button>
-          <button onClick={openUpdateColor} className="edit-color-btn" disabled={palette.length === 0}>
+          <button
+            onClick={openUpdateColor}
+            className="edit-color-btn"
+            disabled={palette.length === 0}
+            title={palette.length === 0 ? 'Create a palette color before editing one' : 'Edit the currently selected palette color'}
+          >
             Edit Selected Color
           </button>
         </div>
@@ -102,6 +108,7 @@ export const Palette: React.FC<PaletteProps> = ({
             type="color"
             value={selectedColor}
             onChange={handleColorChange}
+            title={pickerMode === 'add' ? 'Choose a color to add to the palette' : 'Choose a replacement color'}
             style={{ marginRight: '10px' }}
           />
           <div style={{ display: 'inline-block', marginRight: '10px' }}>
@@ -115,13 +122,18 @@ export const Palette: React.FC<PaletteProps> = ({
               max="255"
               value={selectedAlpha}
               onChange={handleAlphaChange}
+              title="Adjust transparency from fully transparent to fully opaque"
               style={{ width: '100px' }}
             />
           </div>
-          <button onClick={handleApplyColor} className="add-color-confirm-btn">
+          <button
+            onClick={handleApplyColor}
+            className="add-color-confirm-btn"
+            title={pickerMode === 'add' ? 'Add this color to the palette' : 'Update the selected palette color'}
+          >
             {pickerMode === 'add' ? 'Add' : 'Update'}
           </button>
-          <button onClick={() => setShowColorPicker(false)} className="cancel-btn">
+          <button onClick={() => setShowColorPicker(false)} className="cancel-btn" title="Close the color picker without saving">
             Cancel
           </button>
         </div>

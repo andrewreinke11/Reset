@@ -60,7 +60,7 @@ As a freelance consultant, I need to create pixel art in Reset and export files 
 **Acceptance Criteria:**
 - [x] Export as PNG with preserved transparency and correct pixel dimensions
 - [x] Export as JSON containing pixel data and palette information
-- [ ] Export operations complete in <2 seconds
+- [x] Export operations complete in <2 seconds
 - [x] Exported files are valid and can be re-imported by Reset
 - [x] PNG files are Git-friendly (binary format)
 
@@ -81,10 +81,10 @@ As a manager at a large studio, I need new team members to create their first pi
 
 **Acceptance Criteria:**
 - [x] Login page is accessible and functional
-- [ ] User can create first file with minimal confusion
+- [x ] User can create first file with minimal confusion
 - [x] Undo/redo buttons are present and functional
-- [ ] In-app help/tooltips explain each feature
-- [ ] Clear UI communication of file status and available operations
+- [x] In-app help/tooltips explain each feature
+- [x] Clear UI communication of file status and available operations
 
 **Feature Mapping (Current Status):**
 | Feature | Status | Code Location |

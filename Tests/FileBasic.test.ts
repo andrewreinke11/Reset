@@ -4,6 +4,7 @@ import fileRouter from '../src/Controllers/FileController';
 import { storageService } from '../src/services/StorageService';
 import fs from 'fs';
 import path from 'path';
+import { authHeadersFor } from './testAuth';
 
 const app = express();
 app.use(express.json());
@@ -12,7 +13,7 @@ app.use('/file', fileRouter);
 // Basic file API tests (creation, palette, pixel, undo/redo, etc.)
 describe('FileController API', () => {
 	const userName = 'testuser';
-	const headers = { 'x-user-name': userName };
+	const headers = authHeadersFor(userName);
 	const fileName = 'testfile';
 
 	beforeEach(() => {

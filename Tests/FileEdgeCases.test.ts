@@ -2,6 +2,7 @@ import request from 'supertest';
 import express from 'express';
 import fileRouter from '../src/Controllers/FileController';
 import { storageService } from '../src/services/StorageService';
+import { authHeadersFor } from './testAuth';
 
 const app = express();
 app.use(express.json());
@@ -9,7 +10,7 @@ app.use('/file', fileRouter);
 
 describe('FileController API - Edge Cases & Error Handling', () => {
 	const userName = 'testuser';
-	const headers = { 'x-user-name': userName };
+	const headers = authHeadersFor(userName);
 	const fileName = 'testfile';
 
 	beforeEach(() => {

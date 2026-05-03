@@ -3,6 +3,11 @@ import { User, Model, FileResponse, ModelResponse } from '../types';
 
 const API_BASE_URL = 'http://localhost:3000/api';
 
+interface AuthResponse {
+  user: User;
+  token: string;
+}
+
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
@@ -12,35 +17,36 @@ const api = axios.create({
 
 // Add request interceptor to include user authentication
 api.interceptors.request.use((config) => {
-  const userName = localStorage.getItem('userName');
-  if (userName) {
-    config.headers['x-user-name'] = userName;
-    if (config.method === 'post' && config.data) {
-      config.data.userName = userName;
-    }
+  const token = localStorage.getItem('authToken');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
 });
 
 export const authService = {
-  register: async (userName: string, email: string, password: string): Promise<User> => {
+  register: async (userName: string, email: string, password: string): Promise<AuthResponse> => {
     const response = await api.post('/users', { userName, email, password });
+    localStorage.setItem('authToken', response.data.token);
     localStorage.setItem('userName', userName);
     return response.data;
   },
 
-  login: async (userName: string, password: string): Promise<User> => {
+  login: async (userName: string, password: string): Promise<AuthResponse> => {
     const response = await api.post('/users/login', { userName, password });
+    localStorage.setItem('authToken', response.data.token);
     localStorage.setItem('userName', userName);
     return response.data;
   },
 
   logout: () => {
+    localStorage.removeItem('authToken');
     localStorage.removeItem('userName');
   },
 
   getCurrentUser: (): string | null => {
-    return localStorage.getItem('userName');
+    const token = localStorage.getItem('authToken');
+    return token ? localStorage.getItem('userName') : null;
   },
 };
 

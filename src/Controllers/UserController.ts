@@ -1,7 +1,7 @@
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import bcrypt from "bcrypt";
 import { User, users, loadUsers, saveUsers } from "../models/User";
-import type { ResetFile } from "../models/ResetFile";
+import { authenticateToken, AuthenticatedRequest, createAuthToken } from "../middleware/auth";
 
 const router = express.Router();
 
@@ -11,21 +11,27 @@ function findUser(userName: string): User | undefined {
   return users.find((u) => u.userName.toLowerCase() === userName.toLowerCase());
 }
 
-router.get("/", (req: Request, res: Response) => {
-  const usersResponse = users.map(({ passwordHash, ...u }) => u);
-  res.json(usersResponse);
-});
-
-router.get("/:userName", (req: Request, res: Response) => {
-  const user = findUser(req.params.userName as string);
-  if (!user) {
-    return res.status(404).json({ message: "User not found" });
-  }
+function serializeUser(user: User) {
   const { passwordHash, ...userResponse } = user;
-  // Always include 'files' as an array, never undefined
   userResponse.files = Array.isArray(userResponse.files) ? userResponse.files : [];
-  res.json(userResponse);
-});
+  return userResponse;
+}
+
+function requireCurrentUser(req: Request, res: Response, next: NextFunction) {
+  const authenticatedRequest = req as AuthenticatedRequest;
+  const currentUser = authenticatedRequest.userName;
+  const requestedUserName = Array.isArray(req.params.userName) ? req.params.userName[0] : req.params.userName;
+
+  if (!currentUser) {
+    return res.status(401).json({ message: "Authentication token required" });
+  }
+
+  if (requestedUserName && currentUser.toLowerCase() !== requestedUserName.toLowerCase()) {
+    return res.status(403).json({ message: "You can only manage your own account" });
+  }
+
+  next();
+}
 
 router.post("/", async (req: Request, res: Response) => {
   const { userName, email, password } = req.body as { userName?: string; email?: string; password?: string };
@@ -49,8 +55,9 @@ router.post("/", async (req: Request, res: Response) => {
 
     users.push(newUser);
     saveUsers();
-    const { passwordHash: _, ...userResponse } = newUser;
-    res.status(201).json(userResponse);
+
+    const token = createAuthToken(newUser.userName);
+    res.status(201).json({ user: serializeUser(newUser), token });
   } catch (error) {
     res.status(500).json({ message: "Error creating user" });
   }
@@ -73,14 +80,30 @@ router.post("/login", async (req: Request, res: Response) => {
       return res.status(401).json({ message: "Invalid username or password" });
     }
 
-    const { passwordHash, ...userResponse } = user;
-    res.json(userResponse);
+    const token = createAuthToken(user.userName);
+    res.json({ user: serializeUser(user), token });
   } catch (error) {
     res.status(500).json({ message: "Error during login" });
   }
 });
 
-router.put("/:userName", async (req: Request, res: Response) => {
+router.use(authenticateToken);
+
+router.get("/", (req: Request, res: Response) => {
+  const usersResponse = users.map((user) => serializeUser(user));
+  res.json(usersResponse);
+});
+
+router.get("/:userName", requireCurrentUser, (req: Request, res: Response) => {
+  const user = findUser(req.params.userName as string);
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  res.json(serializeUser(user));
+});
+
+router.put("/:userName", requireCurrentUser, async (req: Request, res: Response) => {
   const user = findUser(req.params.userName as string);
   if (!user) {
     return res.status(404).json({ message: "User not found" });
@@ -98,19 +121,21 @@ router.put("/:userName", async (req: Request, res: Response) => {
   if (files !== undefined) user.files = Array.isArray(files) ? files : user.files;
 
   saveUsers();
-
-  const { passwordHash, ...userResponse } = user;
-  res.json(userResponse);
+  res.json(serializeUser(user));
 });
 
-router.delete("/:userName", (req: Request, res: Response) => {
+router.delete("/:userName", requireCurrentUser, (req: Request, res: Response) => {
   const index = users.findIndex((u) => u.userName.toLowerCase() === (req.params.userName as string).toLowerCase());
   if (index === -1) {
     return res.status(404).json({ message: "User not found" });
   }
+
   const [deleted] = users.splice(index, 1);
+  if (!deleted) {
+    return res.status(500).json({ message: "Error deleting user" });
+  }
   saveUsers();
-  res.json(deleted);
+  res.json(serializeUser(deleted));
 });
 
 export default router;

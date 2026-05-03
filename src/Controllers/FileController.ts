@@ -1,19 +1,19 @@
 import express, { Request, Response } from "express";
 import { fileService } from "../services/FileService";
-import { storageService } from "../services/StorageService";
+import { authenticateToken, AuthenticatedRequest } from "../middleware/auth";
 
 const router = express.Router();
 
-// Middleware to extract userName from request (simplified - in real app this would be from auth token)
+router.use(authenticateToken);
+
 const getUserName = (req: Request): string => {
-  const userName = req.headers['x-user-name'] as string || req.body.userName;
+  const userName = (req as AuthenticatedRequest).userName;
   if (!userName) {
     throw new Error("User authentication required");
   }
   return userName;
 };
 
-// Create a new file
 router.post("/create", (req: Request, res: Response) => {
   try {
     const userName = getUserName(req);
@@ -30,7 +30,6 @@ router.post("/create", (req: Request, res: Response) => {
   }
 });
 
-// Add a color to the palette
 router.post("/:fileName/palette/add", (req: Request, res: Response) => {
   try {
     const userName = getUserName(req);
@@ -49,7 +48,6 @@ router.post("/:fileName/palette/add", (req: Request, res: Response) => {
   }
 });
 
-// Update a palette color (cascade to pixels)
 router.put("/:fileName/palette/:colorIndex", (req: Request, res: Response) => {
   try {
     const userName = getUserName(req);
@@ -69,7 +67,6 @@ router.put("/:fileName/palette/:colorIndex", (req: Request, res: Response) => {
   }
 });
 
-// Recolor a pixel
 router.put("/:fileName/pixel", (req: Request, res: Response) => {
   try {
     const userName = getUserName(req);
@@ -88,7 +85,6 @@ router.put("/:fileName/pixel", (req: Request, res: Response) => {
   }
 });
 
-// Undo
 router.post("/:fileName/undo", (req: Request, res: Response) => {
   try {
     const userName = getUserName(req);
@@ -101,7 +97,6 @@ router.post("/:fileName/undo", (req: Request, res: Response) => {
   }
 });
 
-// Redo
 router.post("/:fileName/redo", (req: Request, res: Response) => {
   try {
     const userName = getUserName(req);
@@ -114,7 +109,6 @@ router.post("/:fileName/redo", (req: Request, res: Response) => {
   }
 });
 
-// Get file state
 router.get("/:fileName", (req: Request, res: Response) => {
   try {
     const userName = getUserName(req);
@@ -130,7 +124,6 @@ router.get("/:fileName", (req: Request, res: Response) => {
   }
 });
 
-// Delete a file
 router.delete("/:fileName", (req: Request, res: Response) => {
   try {
     const userName = getUserName(req);
@@ -143,7 +136,6 @@ router.delete("/:fileName", (req: Request, res: Response) => {
   }
 });
 
-// List all files for user
 router.get("/", (req: Request, res: Response) => {
   try {
     const userName = getUserName(req);

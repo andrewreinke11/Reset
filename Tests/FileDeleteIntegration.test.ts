@@ -4,6 +4,7 @@ import fileRouter from '../src/Controllers/FileController';
 import { storageService } from '../src/services/StorageService';
 import fs from 'fs';
 import path from 'path';
+import { authHeadersFor } from './testAuth';
 
 const app = express();
 app.use(express.json());
@@ -11,7 +12,7 @@ app.use('/file', fileRouter);
 
 describe('FileController API - File Deletion Integration', () => {
 	const userName = 'deleteuser';
-	const headers = { 'x-user-name': userName };
+	const headers = authHeadersFor(userName);
 	const fileName = 'deletefile';
 
 	beforeEach(() => {

@@ -9,8 +9,14 @@ const api = axios.create({
 // Add request interceptor to include user authentication
 api.interceptors.request.use((config) => {
     const userName = localStorage.getItem('userName');
+    const token = localStorage.getItem('token');
     if (userName) {
-        config.headers['x-user-name'] = userName;
+        // Prefer JWT Authorization header when available
+        if (token) {
+            config.headers['Authorization'] = `Bearer ${token}`;
+        } else {
+            config.headers['x-user-name'] = userName;
+        }
         if (config.method === 'post' && config.data) {
             config.data.userName = userName;
         }
@@ -21,15 +27,22 @@ export const authService = {
     register: async (userName, email, password) => {
         const response = await api.post('/users', { userName, email, password });
         localStorage.setItem('userName', userName);
+        if (response.data && response.data.token) {
+            localStorage.setItem('token', response.data.token);
+        }
         return response.data;
     },
     login: async (userName, password) => {
         const response = await api.post('/users/login', { userName, password });
         localStorage.setItem('userName', userName);
+        if (response.data && response.data.token) {
+            localStorage.setItem('token', response.data.token);
+        }
         return response.data;
     },
     logout: () => {
         localStorage.removeItem('userName');
+        localStorage.removeItem('token');
     },
     getCurrentUser: () => {
         return localStorage.getItem('userName');

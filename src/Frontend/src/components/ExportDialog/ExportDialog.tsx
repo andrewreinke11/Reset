@@ -79,6 +79,7 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({ model, fileName, onC
             onClick={handleExportJSON} 
             disabled={isExporting}
             className="export-button json-button"
+            title="Download the current file as editable JSON"
           >
             💾 Download JSON
           </button>
@@ -95,6 +96,7 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({ model, fileName, onC
               onClick={handleExportPNG} 
               disabled={isExporting}
               className="export-button png-button"
+              title="Download the current file as a transparent PNG"
             >
               🖼️ PNG
             </button>
@@ -102,6 +104,7 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({ model, fileName, onC
               onClick={handleExportJPG} 
               disabled={isExporting}
               className="export-button jpg-button"
+              title="Download the current file as a JPG image"
             >
               🖼️ JPG
             </button>
@@ -109,13 +112,14 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({ model, fileName, onC
               onClick={handleExportWebP} 
               disabled={isExporting}
               className="export-button webp-button"
+              title="Download the current file as a WebP image"
             >
               🖼️ WebP
             </button>
           </div>
         </div>
 
-        <button onClick={onClose} className="close-button" disabled={isExporting}>
+        <button onClick={onClose} className="close-button" disabled={isExporting} title="Close the export dialog">
           Cancel
         </button>
       </div>

@@ -64,6 +64,7 @@ export const Canvas: React.FC<CanvasProps> = ({ model, onPixelClick, selectedCol
             max="50"
             value={pixelSize}
             onChange={(e) => setPixelSize(Number(e.target.value))}
+            title="Adjust the size of each pixel on the canvas"
           />
           {pixelSize}px
         </label>
@@ -71,6 +72,7 @@ export const Canvas: React.FC<CanvasProps> = ({ model, onPixelClick, selectedCol
       <canvas
         ref={canvasRef}
         onClick={handleCanvasClick}
+        title="Click a pixel to recolor it with the selected palette color"
         style={{ border: '1px solid #ccc', cursor: 'crosshair' }}
       />
       <div className="canvas-info">

@@ -169,7 +169,9 @@ function App() {
         <h1>Reset - Pixel Art Tool</h1>
         <div className="user-info">
           <span>Welcome, {userName}!</span>
-          <button onClick={handleLogout}>Logout</button>
+          <button onClick={handleLogout} title="Log out of your current Reset session">
+            Logout
+          </button>
         </div>
       </header>
 
@@ -199,13 +201,25 @@ function App() {
               <div className="canvas-toolbar">
                 <h2>{currentFile}</h2>
                 <div className="toolbar-buttons">
-                  <button onClick={handleUndo} disabled={!canUndo || loading}>
+                  <button
+                    onClick={handleUndo}
+                    disabled={!canUndo || loading}
+                    title={canUndo ? 'Undo the last canvas or palette change' : 'Nothing to undo right now'}
+                  >
                     Undo
                   </button>
-                  <button onClick={handleRedo} disabled={!canRedo || loading}>
+                  <button
+                    onClick={handleRedo}
+                    disabled={!canRedo || loading}
+                    title={canRedo ? 'Redo the previously undone change' : 'Nothing to redo right now'}
+                  >
                     Redo
                   </button>
-                  <button onClick={() => setShowExportDialog(true)} disabled={loading}>
+                  <button
+                    onClick={() => setShowExportDialog(true)}
+                    disabled={loading}
+                    title="Open export options for the current file"
+                  >
                     📥 Export
                   </button>
                 </div>
@@ -218,7 +232,9 @@ function App() {
             </>
           ) : (
             <div className="no-file-selected">
-              <p>Select or create a file to start editing</p>
+              <p title="Choose an existing file or create a new one from the file manager to start editing">
+                Select or create a file to start editing
+              </p>
             </div>
           )}
         </div>

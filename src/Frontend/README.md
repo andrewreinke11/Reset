@@ -121,7 +121,7 @@ The frontend communicates with the Reset backend API via the service layer in [s
 
 ### Authentication
 
-The frontend uses header-based authentication (`x-user-name`) to identify the current user. After login/registration, the username is stored and sent with every API request.
+The frontend uses JWT bearer authentication to identify the current user. After login/registration, the username and token are stored locally and the token is sent with every API request in the `Authorization` header.
 
 ### Error Handling
 

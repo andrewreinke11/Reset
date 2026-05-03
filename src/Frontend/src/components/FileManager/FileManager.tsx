@@ -72,14 +72,27 @@ export const FileManager: React.FC<FileManagerProps> = ({
       <div className="file-list">
         {files.map(fileName => (
           <div key={fileName} className={`file-item ${currentFile === fileName ? 'active' : ''}`}>
-            <span onClick={() => onFileSelect(fileName)}>{fileName}</span>
-            <button onClick={() => handleDeleteFile(fileName)}>Delete</button>
+            <span
+              onClick={() => onFileSelect(fileName)}
+              title={`Open ${fileName} for editing`}
+              style={{ cursor: 'pointer' }}
+            >
+              {fileName}
+            </span>
+            <button
+              onClick={() => handleDeleteFile(fileName)}
+              title={`Delete ${fileName} from your workspace`}
+            >
+              Delete
+            </button>
           </div>
         ))}
       </div>
 
       {!showCreateForm ? (
-        <button onClick={() => setShowCreateForm(true)}>Create New File</button>
+        <button onClick={() => setShowCreateForm(true)} title="Create a new pixel art file">
+          Create New File
+        </button>
       ) : (
         <div className="create-file-form">
           <input
@@ -87,6 +100,7 @@ export const FileManager: React.FC<FileManagerProps> = ({
             placeholder="File name"
             value={newFileName}
             onChange={(e) => setNewFileName(e.target.value)}
+            title="Choose a unique file name"
           />
           <input
             type="number"
@@ -95,6 +109,7 @@ export const FileManager: React.FC<FileManagerProps> = ({
             onChange={(e) => setNewFileWidth(Number(e.target.value))}
             min="1"
             max="256"
+            title="Set the canvas width in pixels"
           />
           <input
             type="number"
@@ -103,11 +118,14 @@ export const FileManager: React.FC<FileManagerProps> = ({
             onChange={(e) => setNewFileHeight(Number(e.target.value))}
             min="1"
             max="256"
+            title="Set the canvas height in pixels"
           />
-          <button onClick={handleCreateFile} disabled={loading}>
+          <button onClick={handleCreateFile} disabled={loading} title="Create the file with the chosen dimensions">
             {loading ? 'Creating...' : 'Create'}
           </button>
-          <button onClick={() => setShowCreateForm(false)}>Cancel</button>
+          <button onClick={() => setShowCreateForm(false)} title="Close the new file form">
+            Cancel
+          </button>
         </div>
       )}
     </div>
