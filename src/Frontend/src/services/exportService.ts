@@ -1,4 +1,4 @@
-import type { Model } from '../../../models/Model';
+import type { Model } from '../types';
 
 /**
  * Export model as JSON file

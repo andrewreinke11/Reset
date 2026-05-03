@@ -15,10 +15,10 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
+    "test": "jest --forceExit",
     "dev": "ts-node src/server.ts",
     "start": "node dist/server.js",
     "build": "tsc",
-    "test": "jest",
     "migrate": "ts-node src/scripts/migrate.ts"
   },
   "dependencies": {
